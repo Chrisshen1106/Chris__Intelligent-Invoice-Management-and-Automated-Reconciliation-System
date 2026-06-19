@@ -1,0 +1,12 @@
+[
+  {
+    "claimId": "CLM-202604-001",
+    "applicantName": "Test Employee",
+    "expenseItem": "辦公用品",
+    "applyDate": "2026-04-01",
+    "amount": 2000,
+    "statusCode": 1,
+    "statusDescription": "待核准",
+    "attachmentUrl": "https://mock.example.com/receipt.jpg"
+  }
+]

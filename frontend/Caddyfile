@@ -1,0 +1,32 @@
+:80 {
+    root * /usr/share/caddy
+
+    handle /api/docs* {
+        uri strip_prefix /api
+        reverse_proxy backend:8000
+    }
+
+    handle /api/openapi.json {
+        uri strip_prefix /api
+        reverse_proxy backend:8000
+    }
+
+    handle /api/auth/* {
+        uri strip_prefix /api
+        reverse_proxy backend:8000
+    }
+
+    handle /api/health* {
+        uri strip_prefix /api
+        reverse_proxy backend:8000
+    }
+
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
+
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "userId": "USR-1001",
+    "applyTime": "2026-04-08 09:00:00",
+    "email": "newuser@example.com",
+    "fullName": "New User",
+    "accountStatus": "審核中"
+  }
+]

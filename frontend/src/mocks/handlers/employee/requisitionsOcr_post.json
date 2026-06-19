@@ -1,0 +1,28 @@
+{
+  "doc_type": "requisition",
+  "applicant": "王小明",
+  "requisition_date": "2026-04-01",
+  "requisition_no": "PR-20260401-001",
+  "department": "資訊部",
+  "company_name": "台灣科技股份有限公司",
+  "vendor_no": "V-0012",
+  "total_amount": 15000,
+  "items": [
+    {
+      "item_no": "1",
+      "material_no": "MAT-001",
+      "name": "A4 影印紙",
+      "quantity": 50,
+      "unit_price": 100,
+      "amount": 5000
+    },
+    {
+      "item_no": "2",
+      "material_no": "MAT-002",
+      "name": "碳粉匣",
+      "quantity": 5,
+      "unit_price": 2000,
+      "amount": 10000
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "claim": {
+    "claimId": "CLM-202604-001",
+    "invoiceNo": "JayChou_Invoice001",
+    "applicantName": "Test Employee",
+    "applicantEmail": "employee@example.com",
+    "expenseItem": "辦公用品",
+    "applyDate": "2026-04-01",
+    "invoiceDate": "2026-04-01",
+    "amount": 2000,
+    "statusCode": 1,
+    "statusDescription": "待核准",
+    "attachmentUrl": "/invoices/sample_invoice.png"
+  },
+  "invoice": {
+    "invoiceNo": "JayChou_Invoice001",
+    "poNo": "PO-202604-001",
+    "vendorName": "杰威爾音樂有限公司",
+    "invoiceDate": "2026-04-01",
+    "totalAmount": 2000,
+    "items": [
+      {
+        "itemName": "辦公用品",
+        "quantity": 1,
+        "unitPrice": 2000,
+        "lineAmount": 2000
+      }
+    ],
+    "files": [
+      {
+        "url": "/invoices/sample_invoice.png",
+        "originalFilename": "JayChou_Invoice001.pdf"
+      }
+    ]
+  }
+}

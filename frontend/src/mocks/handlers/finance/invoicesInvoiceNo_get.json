@@ -1,0 +1,18 @@
+{
+  "invoiceNo": "INV-12345678",
+  "poNo": "PO-1234",
+  "grNo": "GR-1234",
+  "vendorName": "Mock Vendor Ltd",
+  "invoiceImageUrl": "https://mock.example.com/invoice-img.png",
+  "items": [
+    {
+      "itemName": "Mock Item A",
+      "poQty": 10,
+      "poUnitPrice": 500,
+      "grQty": 10,
+      "grUnitPrice": 500,
+      "invoiceQty": 10,
+      "invoiceUnitPrice": 500
+    }
+  ]
+}

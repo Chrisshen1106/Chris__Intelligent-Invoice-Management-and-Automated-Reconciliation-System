@@ -1,0 +1,5 @@
+{
+  "authUrl": "https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&response_type=code&scope=openid%20email%20profile&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauth%2Fcallback&state=mock_random_state_string_123",
+  "state": "mock_random_state_string_123",
+  "redirectUrl": "http://localhost:5173/auth/callback"
+}

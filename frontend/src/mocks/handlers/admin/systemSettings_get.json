@@ -1,0 +1,9 @@
+[
+  {
+    "key": "tolerance_rate",
+    "value": 0.01,
+    "type": "number",
+    "description_zh": "發票對帳容忍比率，當價差在此比率內視為容差通過",
+    "description_en": "Invoice reconciliation tolerance rate. Price differences within this ratio are considered acceptable."
+  }
+]

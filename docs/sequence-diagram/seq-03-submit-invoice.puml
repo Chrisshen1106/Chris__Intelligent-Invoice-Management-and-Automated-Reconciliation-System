@@ -1,0 +1,58 @@
+@startuml Flow 3: Employee Confirms & Submits Invoice
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 200
+
+actor       "Employee\n(Role: E)"  as Emp
+participant "EmployeeDashboard"    as EmpUI
+participant "FastAPI Backend"      as API
+participant "StorageService"       as Storage
+participant "RPCService\n(db.py)"  as RPC
+database    "Supabase\n(PostgreSQL)" as DB
+database    "Supabase\nStorage"    as Bucket
+
+== Flow 3: Employee Confirms & Submits Invoice ==
+
+Emp -> EmpUI : Confirm / edit fields → Click Submit
+activate EmpUI
+EmpUI -> API : POST /api/employee/invoices\n(multipart: invoiceFile + invoiceData JSON)
+activate API
+
+API -> Storage : upload_to_storage(\n  entity_type='invoice',\n  entity_no=invoice_no,\n  filename, file_bytes\n)
+activate Storage
+Storage -> Bucket : storage.from('documents')\n.upload(path, file_bytes)
+activate Bucket
+Bucket --> Storage : storage_path
+deactivate Bucket
+Storage --> API : file_meta { bucket_id, storage_path,\noriginal_filename, file_type, file_size }
+deactivate Storage
+
+API -> RPC : create_invoice_with_ocr(\n  employee_id, invoice_no, invoice_date,\n  total_amount, vendor_name, po_no,\n  ocr_parsed_json, files=[file_meta]\n)
+activate RPC
+
+RPC -> DB : dev_create_invoice_with_ocr RPC\n(atomic transaction)
+activate DB
+DB -> DB : vendor upsert (from PO lookup)
+DB -> DB : INSERT core.invoices\n  workflow_status = 'pending_review'
+DB -> DB : INSERT core.ocr_runs\n  (ocr_parsed_json, ocr_raw_json)
+DB -> DB : INSERT core.invoice_files\n  (storage_path, file_type ...)
+DB --> RPC : { id, invoice_no, workflow_status }
+deactivate DB
+
+RPC --> API : invoice record
+deactivate RPC
+
+alt DB transaction failed
+    API -> Storage : remove_from_storage(bucket_id, storage_path)
+    note right : compensating delete\nto keep Storage in sync
+    API --> EmpUI : 500 Error
+else success
+    API --> EmpUI : 200 OK\n{ invoiceId, invoiceNo,\nstatus: 'pending_review', message }
+end
+deactivate API
+
+EmpUI --> Emp : "Invoice submitted successfully"
+deactivate EmpUI
+
+@enduml

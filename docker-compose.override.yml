@@ -1,0 +1,75 @@
+services:
+  redis:
+    ports:
+      - "6379:6379"
+
+  ollama:
+    ports:
+      - "11434:11434"
+
+  ocr-service:
+    image: iimars-ocr-service:dev
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    volumes:
+      - ./ocr-service/app:/app/app
+      - ocr_paddle_cache:/root/.paddleocr
+      - ocr_paddlex_cache:/root/.paddlex
+      - ocr_logs:/app/logs
+    ports:
+      - "8001:8001"
+
+  backend:
+    image: iimars-backend:dev
+    build:
+      target: development
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/app
+      - backend_paddle_cache:/root/.paddleocr
+      - backend_cache:/root/.cache
+    ports:
+      - "8000:8000"
+
+  celery-worker:
+    image: iimars-backend:dev
+    build:
+      target: development
+    command:
+      [
+        "watchmedo",
+        "auto-restart",
+        "--directory=/app",
+        "--pattern=*.py",
+        "--recursive",
+        "--",
+        "celery",
+        "-A",
+        "celery_app.celery_app",
+        "worker",
+        "--loglevel=info",
+        "--concurrency=5"
+      ]
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/app
+      - backend_paddle_cache:/root/.paddleocr
+      - backend_cache:/root/.cache
+
+  web:
+    image: iimars-web:dev
+    build:
+      target: development
+    env_file:
+      - ./frontend/.env.dev
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+
+volumes:
+  backend_paddle_cache:
+  backend_cache:
+  frontend_node_modules:

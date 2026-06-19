@@ -1,0 +1,17 @@
+# ── Web 框架 ────────────────────────────────────────────────────────────────
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+
+# ── HTTP / multipart ───────────────────────────────────────────────────────
+python-multipart==0.0.27
+httpx==0.28.1
+celery[redis]==5.4.0
+
+# env
+python-dotenv==1.2.2
+
+# 資料庫
+supabase==2.29.0
+
+# JWT (Supabase access token 驗證；crypto extra 支援 ES256/RS256)
+PyJWT[crypto]>=2.10.1

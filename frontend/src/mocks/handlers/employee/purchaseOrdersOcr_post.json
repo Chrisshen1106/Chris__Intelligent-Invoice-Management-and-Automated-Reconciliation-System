@@ -1,0 +1,27 @@
+{
+  "poNo": "PO-20260405-001",
+  "purchaser": "李大華",
+  "department": "採購部",
+  "vendorName": "大同文具供應商",
+  "taxId": "12345678",
+  "poDate": "2026-04-05",
+  "totalAmount": 15000,
+  "items": [
+    {
+      "lineNo": 1,
+      "itemName": "A4 影印紙",
+      "spec": "",
+      "quantity": 50,
+      "unitPrice": 100,
+      "lineAmount": 5000
+    },
+    {
+      "lineNo": 2,
+      "itemName": "碳粉匣",
+      "spec": "HP 205A",
+      "quantity": 5,
+      "unitPrice": 2000,
+      "lineAmount": 10000
+    }
+  ]
+}

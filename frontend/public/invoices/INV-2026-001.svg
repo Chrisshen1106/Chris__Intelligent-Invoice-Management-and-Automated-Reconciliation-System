@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="820" viewBox="0 0 600 820">
+  <rect width="600" height="820" fill="#fff" stroke="#ccc" stroke-width="1"/>
+
+  <!-- Header bar -->
+  <rect x="0" y="0" width="600" height="80" fill="#1a3c6e"/>
+  <text x="30" y="38" font-size="22" font-weight="bold" fill="#fff" font-family="Arial">科技供應商 A</text>
+  <text x="30" y="62" font-size="13" fill="#aac4ff" font-family="Arial">TechVendor A Co., Ltd. | 統編: 12345678</text>
+  <text x="420" y="38" font-size="13" fill="#fff" font-family="Arial">電話: 02-2345-6789</text>
+  <text x="420" y="58" font-size="13" fill="#fff" font-family="Arial">Email: ap@techvendora.tw</text>
+
+  <!-- Invoice title -->
+  <text x="300" y="120" font-size="28" font-weight="bold" fill="#1a3c6e" text-anchor="middle" font-family="Arial">發　票　Invoice</text>
+  <line x1="30" y1="130" x2="570" y2="130" stroke="#1a3c6e" stroke-width="2"/>
+
+  <!-- Invoice meta -->
+  <text x="40" y="158" font-size="13" fill="#333" font-family="Arial">發票號碼 Invoice No.:</text>
+  <text x="220" y="158" font-size="13" font-weight="bold" fill="#000" font-family="Arial">INV-2026-001</text>
+  <text x="380" y="158" font-size="13" fill="#333" font-family="Arial">發票日期:</text>
+  <text x="460" y="158" font-size="13" fill="#000" font-family="Arial">2026-03-20</text>
+
+  <text x="40" y="180" font-size="13" fill="#333" font-family="Arial">採購單號 PO No.:</text>
+  <text x="220" y="180" font-size="13" font-weight="bold" fill="#000" font-family="Arial">PO-8801</text>
+  <text x="380" y="180" font-size="13" fill="#333" font-family="Arial">付款條件:</text>
+  <text x="460" y="180" font-size="13" fill="#000" font-family="Arial">Net 30</text>
+
+  <text x="40" y="202" font-size="13" fill="#333" font-family="Arial">買受人:</text>
+  <text x="220" y="202" font-size="13" fill="#000" font-family="Arial">ABC 企業股份有限公司</text>
+
+  <!-- Section: Items -->
+  <rect x="30" y="220" width="540" height="28" fill="#1a3c6e" rx="3"/>
+  <text x="40" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">品項 Item</text>
+  <text x="240" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">數量 Qty</text>
+  <text x="320" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">單價 Unit Price</text>
+  <text x="450" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">小計 Amount</text>
+
+  <!-- Row 1 -->
+  <rect x="30" y="248" width="540" height="50" fill="#f0f4ff"/>
+  <text x="40" y="268" font-size="13" fill="#000" font-family="Arial">MacBook Pro (14-inch, M3)</text>
+  <text x="40" y="286" font-size="11" fill="#666" font-family="Arial">型號: MBP-14-M3-16GB-512GB</text>
+  <text x="252" y="275" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">10</text>
+  <text x="370" y="275" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$60,000</text>
+  <text x="510" y="275" font-size="13" font-weight="bold" fill="#000" font-family="Arial" text-anchor="middle">$600,000</text>
+
+  <!-- Row 2 -->
+  <rect x="30" y="298" width="540" height="50" fill="#fff"/>
+  <text x="40" y="318" font-size="13" fill="#000" font-family="Arial">Magic Mouse (第三代)</text>
+  <text x="40" y="336" font-size="11" fill="#666" font-family="Arial">型號: Magic-Mouse-3-Space-Grey</text>
+  <text x="252" y="325" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">10</text>
+  <text x="370" y="325" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$2,500</text>
+  <text x="510" y="325" font-size="13" font-weight="bold" fill="#000" font-family="Arial" text-anchor="middle">$25,000</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="348" x2="570" y2="348" stroke="#dee2e6" stroke-width="1"/>
+
+  <!-- Subtotal area -->
+  <text x="370" y="375" font-size="13" fill="#333" font-family="Arial">小計 Subtotal:</text>
+  <text x="510" y="375" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$625,000</text>
+
+  <text x="370" y="398" font-size="13" fill="#333" font-family="Arial">稅額 Tax (5%):</text>
+  <text x="510" y="398" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$31,250</text>
+
+  <rect x="330" y="407" width="240" height="30" fill="#1a3c6e" rx="3"/>
+  <text x="370" y="427" font-size="14" font-weight="bold" fill="#fff" font-family="Arial">總計 Total:</text>
+  <text x="510" y="427" font-size="14" font-weight="bold" fill="#fff" font-family="Arial" text-anchor="middle">$656,250</text>
+
+  <!-- Bank info -->
+  <rect x="30" y="460" width="540" height="90" fill="#f8f9fa" rx="5" stroke="#dee2e6" stroke-width="1"/>
+  <text x="44" y="482" font-size="12" font-weight="bold" fill="#333" font-family="Arial">匯款資訊 Bank Details</text>
+  <text x="44" y="502" font-size="12" fill="#555" font-family="Arial">銀行: 台灣銀行 Bank of Taiwan  |  帳號: 001-123-456789</text>
+  <text x="44" y="522" font-size="12" fill="#555" font-family="Arial">戶名: 科技供應商 A 股份有限公司</text>
+  <text x="44" y="542" font-size="12" fill="#555" font-family="Arial">SWIFT: BKTWTWTP</text>
+
+  <!-- Notes -->
+  <text x="44" y="580" font-size="12" fill="#333" font-family="Arial">備註: 本發票依採購單 PO-8801 開立，請於收到後 30 日內完成付款。</text>
+  <text x="44" y="598" font-size="11" fill="#888" font-family="Arial">逾期未付將依合約收取年利率 5% 之遲延利息。</text>
+
+  <!-- Signature -->
+  <text x="380" y="680" font-size="12" fill="#333" font-family="Arial">授權簽章 Authorized Signature:</text>
+  <line x1="380" y1="710" x2="570" y2="710" stroke="#333" stroke-width="1.5"/>
+  <text x="420" y="726" font-size="11" fill="#666" font-family="Arial">總經理 / General Manager</text>
+
+  <!-- Stamp (decorative circle) -->
+  <circle cx="140" cy="700" r="52" fill="none" stroke="#e63946" stroke-width="2.5" opacity="0.7"/>
+  <circle cx="140" cy="700" r="44" fill="none" stroke="#e63946" stroke-width="1" opacity="0.5"/>
+  <text x="140" y="696" font-size="11" fill="#e63946" text-anchor="middle" font-family="Arial" opacity="0.8" font-weight="bold">科技供應商 A</text>
+  <text x="140" y="712" font-size="10" fill="#e63946" text-anchor="middle" font-family="Arial" opacity="0.8">TECHVENDOR A</text>
+
+  <!-- Footer -->
+  <line x1="0" y1="780" x2="600" y2="780" stroke="#dee2e6" stroke-width="1"/>
+  <text x="300" y="800" font-size="10" fill="#999" text-anchor="middle" font-family="Arial">科技供應商 A Co., Ltd. | 台北市中山區中山北路二段 99 號 | www.techvendora.tw</text>
+</svg>

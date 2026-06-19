@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="820" viewBox="0 0 600 820">
+  <rect width="600" height="820" fill="#fff" stroke="#ccc" stroke-width="1"/>
+
+  <!-- Header bar -->
+  <rect x="0" y="0" width="600" height="80" fill="#2d6a4f"/>
+  <text x="30" y="38" font-size="22" font-weight="bold" fill="#fff" font-family="Arial">辦公設備 B</text>
+  <text x="30" y="62" font-size="13" fill="#b7e4c7" font-family="Arial">OfficePlus B Ltd. | 統編: 87654321</text>
+  <text x="420" y="38" font-size="13" fill="#fff" font-family="Arial">電話: 02-9876-5432</text>
+  <text x="420" y="58" font-size="13" fill="#fff" font-family="Arial">Email: billing@officeplusb.tw</text>
+
+  <!-- Invoice title -->
+  <text x="300" y="120" font-size="28" font-weight="bold" fill="#2d6a4f" text-anchor="middle" font-family="Arial">發　票　Invoice</text>
+  <line x1="30" y1="130" x2="570" y2="130" stroke="#2d6a4f" stroke-width="2"/>
+
+  <!-- Invoice meta -->
+  <text x="40" y="158" font-size="13" fill="#333" font-family="Arial">發票號碼 Invoice No.:</text>
+  <text x="220" y="158" font-size="13" font-weight="bold" fill="#000" font-family="Arial">INV-2026-002</text>
+  <text x="380" y="158" font-size="13" fill="#333" font-family="Arial">發票日期:</text>
+  <text x="460" y="158" font-size="13" fill="#000" font-family="Arial">2026-03-21</text>
+
+  <text x="40" y="180" font-size="13" fill="#333" font-family="Arial">採購單號 PO No.:</text>
+  <text x="220" y="180" font-size="13" font-weight="bold" fill="#000" font-family="Arial">PO-8802</text>
+  <text x="380" y="180" font-size="13" fill="#333" font-family="Arial">付款條件:</text>
+  <text x="460" y="180" font-size="13" fill="#000" font-family="Arial">Net 30</text>
+
+  <text x="40" y="202" font-size="13" fill="#333" font-family="Arial">買受人:</text>
+  <text x="220" y="202" font-size="13" fill="#000" font-family="Arial">ABC 企業股份有限公司</text>
+
+  <!-- Section: Items -->
+  <rect x="30" y="220" width="540" height="28" fill="#2d6a4f" rx="3"/>
+  <text x="40" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">品項 Item</text>
+  <text x="240" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">數量 Qty</text>
+  <text x="320" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">單價 Unit Price</text>
+  <text x="450" y="239" font-size="12" fill="#fff" font-weight="bold" font-family="Arial">小計 Amount</text>
+
+  <!-- Row 1 (OCR 辨識錯誤: $12,100 實為 $12,000) -->
+  <rect x="30" y="248" width="540" height="50" fill="#fff9e6"/>
+  <text x="40" y="268" font-size="13" fill="#000" font-family="Arial">Dell 27" 顯示器 U2724D</text>
+  <text x="40" y="286" font-size="11" fill="#666" font-family="Arial">型號: DELL-U2724D-USB-C  (顏色: 黑)</text>
+  <text x="252" y="275" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">5</text>
+  <!-- OCR 辨識疑似誤判：12,000 → 12,100 (6 vs 5) -->
+  <text x="370" y="275" font-size="13" fill="#c0392b" font-family="Arial" text-anchor="middle">$12,100</text>
+  <text x="510" y="275" font-size="13" font-weight="bold" fill="#c0392b" font-family="Arial" text-anchor="middle">$60,500</text>
+
+  <!-- Row 2 -->
+  <rect x="30" y="298" width="540" height="50" fill="#f8f9fa"/>
+  <text x="40" y="318" font-size="13" fill="#000" font-family="Arial">Dell 顯示器支架 MDA20</text>
+  <text x="40" y="336" font-size="11" fill="#666" font-family="Arial">相容型號: U2724D</text>
+  <text x="252" y="325" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">5</text>
+  <text x="370" y="325" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$1,200</text>
+  <text x="510" y="325" font-size="13" font-weight="bold" fill="#000" font-family="Arial" text-anchor="middle">$6,000</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="348" x2="570" y2="348" stroke="#dee2e6" stroke-width="1"/>
+
+  <!-- Note about OCR uncertainty -->
+  <rect x="30" y="355" width="540" height="28" fill="#fff3cd" rx="3"/>
+  <text x="44" y="374" font-size="11" fill="#856404" font-family="Arial">⚠ OCR 備註: 第一行單價數字模糊，可能為 $12,000 或 $12,100，請人工確認。</text>
+
+  <!-- Subtotal area -->
+  <text x="370" y="415" font-size="13" fill="#333" font-family="Arial">小計 Subtotal:</text>
+  <text x="510" y="415" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$66,500</text>
+
+  <text x="370" y="438" font-size="13" fill="#333" font-family="Arial">稅額 Tax (5%):</text>
+  <text x="510" y="438" font-size="13" fill="#000" font-family="Arial" text-anchor="middle">$3,325</text>
+
+  <rect x="330" y="447" width="240" height="30" fill="#2d6a4f" rx="3"/>
+  <text x="370" y="467" font-size="14" font-weight="bold" fill="#fff" font-family="Arial">總計 Total:</text>
+  <text x="510" y="467" font-size="14" font-weight="bold" fill="#fff" font-family="Arial" text-anchor="middle">$69,825</text>
+
+  <!-- Bank info -->
+  <rect x="30" y="500" width="540" height="90" fill="#f8f9fa" rx="5" stroke="#dee2e6" stroke-width="1"/>
+  <text x="44" y="522" font-size="12" font-weight="bold" fill="#333" font-family="Arial">匯款資訊 Bank Details</text>
+  <text x="44" y="542" font-size="12" fill="#555" font-family="Arial">銀行: 第一商業銀行 First Bank  |  帳號: 007-234-567890</text>
+  <text x="44" y="562" font-size="12" fill="#555" font-family="Arial">戶名: 辦公設備 B 有限公司</text>
+  <text x="44" y="582" font-size="12" fill="#555" font-family="Arial">SWIFT: FCBKTWTP</text>
+
+  <!-- Notes -->
+  <text x="44" y="620" font-size="12" fill="#333" font-family="Arial">備註: 本發票依採購單 PO-8802 開立，請於 30 日內匯款。</text>
+  <text x="44" y="638" font-size="11" fill="#888" font-family="Arial">如有疑問請聯繫 billing@officeplusb.tw 或撥打客服專線。</text>
+
+  <!-- Signature -->
+  <text x="380" y="700" font-size="12" fill="#333" font-family="Arial">授權簽章 Authorized Signature:</text>
+  <line x1="380" y1="730" x2="570" y2="730" stroke="#333" stroke-width="1.5"/>
+  <text x="420" y="746" font-size="11" fill="#666" font-family="Arial">財務長 / Chief Financial Officer</text>
+
+  <!-- Stamp -->
+  <circle cx="140" cy="720" r="52" fill="none" stroke="#2d6a4f" stroke-width="2.5" opacity="0.7"/>
+  <circle cx="140" cy="720" r="44" fill="none" stroke="#2d6a4f" stroke-width="1" opacity="0.5"/>
+  <text x="140" y="716" font-size="11" fill="#2d6a4f" text-anchor="middle" font-family="Arial" opacity="0.8" font-weight="bold">辦公設備 B</text>
+  <text x="140" y="732" font-size="10" fill="#2d6a4f" text-anchor="middle" font-family="Arial" opacity="0.8">OFFICEPLUS B</text>
+
+  <!-- Footer -->
+  <line x1="0" y1="780" x2="600" y2="780" stroke="#dee2e6" stroke-width="1"/>
+  <text x="300" y="800" font-size="10" fill="#999" text-anchor="middle" font-family="Arial">辦公設備 B Ltd. | 台中市西屯區台灣大道三段 88 號 | www.officeplusb.tw</text>
+</svg>

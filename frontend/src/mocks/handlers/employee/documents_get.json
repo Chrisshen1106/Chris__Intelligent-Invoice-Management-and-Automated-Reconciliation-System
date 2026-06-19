@@ -1,0 +1,42 @@
+[
+  {
+    "docId": "DOC-001",
+    "docType": "purchaseOrder",
+    "docNo": "PO-20260405-001",
+    "totalAmount": 15000,
+    "submittedAt": "2026-04-05T10:30:00Z",
+    "status": "approved"
+  },
+  {
+    "docId": "DOC-002",
+    "docType": "goodsReceipt",
+    "docNo": "GR-20260410-001",
+    "totalAmount": 15000,
+    "submittedAt": "2026-04-10T14:20:00Z",
+    "status": "pendingMatch"
+  },
+  {
+    "docId": "DOC-003",
+    "docType": "invoice",
+    "docNo": "AA-12345678",
+    "totalAmount": 15000,
+    "submittedAt": "2026-04-11T09:10:00Z",
+    "status": "pending"
+  },
+  {
+    "docId": "DOC-004",
+    "docType": "invoice",
+    "docNo": "INV-9999",
+    "totalAmount": 5000,
+    "submittedAt": "2026-04-01T08:00:00Z",
+    "status": "rejected"
+  },
+  {
+    "docId": "DOC-005",
+    "docType": "invoice",
+    "docNo": "INV-8888",
+    "totalAmount": 7000,
+    "submittedAt": "2026-04-02T08:00:00Z",
+    "status": "onHold"
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "invoiceNo": "INV-12345678",
+    "poNo": "PO-1234",
+    "vendorName": "Mock Vendor Ltd",
+    "invoiceDate": "2026-04-08",
+    "totalAmount": 5000,
+    "matchStatus": "matched"
+  }
+]

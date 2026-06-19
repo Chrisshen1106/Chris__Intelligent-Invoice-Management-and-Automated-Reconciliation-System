@@ -1,0 +1,121 @@
+x-ocr-environment: &ocr-environment
+  PADDLEOCR_LANG: ch
+  PADDLEOCR_DEVICE: cpu
+  PADDLEOCR_VERSION: PP-OCRv5
+  PADDLEOCR_ENGINE: paddle_dynamic
+  PADDLEOCR_DET_MODEL: PP-OCRv5_mobile_det
+  PADDLEOCR_REC_MODEL: PP-OCRv5_mobile_rec
+  OCR_PDF_RENDER_DPI: 160
+  OCR_MAX_IMAGE_SIDE: 1800
+  OCR_LOG_LEVEL: INFO
+  OCR_LOG_FILE_PATH: /app/logs/ocr-service.log
+  OCR_LOG_MAX_BYTES: 10485760
+  OCR_LOG_BACKUP_COUNT: 5
+
+x-backend-environment: &backend-environment
+  REDIS_URL: redis://redis:6379/0
+  CELERY_BROKER_URL: redis://redis:6379/0
+  CELERY_RESULT_BACKEND: redis://redis:6379/1
+  OCR_JOB_RESULT_EXPIRES: 86400
+  OCR_SERVICE_URL: http://ocr-service:8001
+  OCR_REQUEST_TIMEOUT: 180
+  OLLAMA_BASE_URL: http://ollama:11434
+  OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:9b}
+  OLLAMA_REQUEST_TIMEOUT: 300
+
+x-backend-build: &backend-build
+  context: ./backend
+  dockerfile: Dockerfile
+
+x-backend-depends-on: &backend-depends-on
+  redis:
+    condition: service_healthy
+  ocr-service:
+    condition: service_healthy
+  ollama-pull:
+    condition: service_completed_successfully
+
+x-backend-service: &backend-service
+  image: iimars-backend
+  build: *backend-build
+  environment: *backend-environment
+  depends_on: *backend-depends-on
+
+services:
+  redis:
+    image: redis:7-alpine
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    expose:
+      - "11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    command: ["pull", "${OLLAMA_MODEL:-qwen3.5:9b}"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: "no"
+
+  ocr-service:
+    image: iimars-ocr-service
+    build:
+      context: ./ocr-service
+      dockerfile: Dockerfile
+    environment: *ocr-environment
+    expose:
+      - "8001"
+    volumes:
+      - ocr_paddle_cache:/root/.paddleocr
+      - ocr_paddlex_cache:/root/.paddlex
+      - ocr_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  backend:
+    <<: *backend-service
+
+  celery-worker:
+    <<: *backend-service
+    command: ["celery", "-A", "celery_app.celery_app", "worker", "--loglevel=info", "--concurrency=5"]
+
+  web:
+    image: iimars-web
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+
+volumes:
+  ollama_data:
+  ocr_paddle_cache:
+  ocr_paddlex_cache:
+  ocr_logs:
+  backend_logs:

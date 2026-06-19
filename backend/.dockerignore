@@ -1,0 +1,30 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+env/
+
+# Test / cache artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Old / scratch files
+old_*.py
+old_*.html

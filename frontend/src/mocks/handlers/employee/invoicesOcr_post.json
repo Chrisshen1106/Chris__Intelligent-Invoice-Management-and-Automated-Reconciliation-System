@@ -1,0 +1,22 @@
+{
+  "invoiceNo": "AA-12345678",
+  "poNo": "PO-20260405-001",
+  "invoiceDate": "2026-04-08",
+  "vendorName": "大同文具供應商",
+  "taxId": "12345678",
+  "totalAmount": 15000,
+  "items": [
+    {
+      "lineNo": 1,
+      "itemName": "A4 影印紙",
+      "quantity": 50,
+      "unitPrice": 100
+    },
+    {
+      "lineNo": 2,
+      "itemName": "碳粉匣",
+      "quantity": 5,
+      "unitPrice": 2000
+    }
+  ]
+}

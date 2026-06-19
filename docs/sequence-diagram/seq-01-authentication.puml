@@ -1,0 +1,37 @@
+@startuml Flow 1: Authentication & Role-based Access
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 200
+
+actor       "Employee\n(Role: E)" as Emp
+participant "Vue Router"          as Router
+database    "Supabase\n(PostgreSQL)" as DB
+participant "EmployeeDashboard"   as EmpUI
+
+== Flow 1: Authentication & Role-based Access ==
+
+Emp -> Router : Navigate to /employee-dashboard
+activate Router
+
+Router -> DB : supabase.auth.getSession()
+activate DB
+DB --> Router : session (JWT)
+deactivate DB
+
+Router -> DB : profiles.select(role_code, is_active)\nWHERE id = session.user.id
+activate DB
+DB --> Router : { role_code: 'E', is_active: true }
+deactivate DB
+
+alt session missing
+    Router --> Emp : redirect to /
+else role not allowed
+    Router --> Emp : redirect to /
+else authenticated & authorized
+    Router --> EmpUI : next() — render EmployeeDashboard
+end
+
+deactivate Router
+
+@enduml

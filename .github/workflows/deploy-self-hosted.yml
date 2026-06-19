@@ -1,0 +1,75 @@
+name: Deploy to Self-Hosted Runner
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: self-hosted-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Docker Compose Deploy
+    runs-on: [self-hosted, linux, x64, gpu]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Write production environment files
+        run: |
+          cat > backend/.env.prod <<'EOF'
+          APP_ENV=production
+          DOCS_URL=/docs
+          REDOC_URL=/redoc
+          OPENAPI_URL=/openapi.json
+          LOG_LEVEL=INFO
+          LOG_FILE_PATH=logs/app.log
+          CORS_ORIGINS=${{ secrets.FRONTEND_ORIGIN || 'http://localhost,http://127.0.0.1' }}
+          SUPABASE_URL=${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_JWT_SECRET=${{ secrets.SUPABASE_JWT_SECRET }}
+          ALLOW_DEV_FALLBACK=0
+          REDIS_URL=redis://redis:6379/0
+          CELERY_BROKER_URL=redis://redis:6379/0
+          CELERY_RESULT_BACKEND=redis://redis:6379/1
+          OCR_JOB_RESULT_EXPIRES=86400
+          OCR_SERVICE_URL=http://ocr-service:8001
+          OCR_REQUEST_TIMEOUT=180
+          OLLAMA_BASE_URL=http://ollama:11434
+          OLLAMA_MODEL=${{ vars.OLLAMA_MODEL || 'qwen3.5:0.8b' }}
+          OLLAMA_REQUEST_TIMEOUT=300
+          EOF
+
+          cat > frontend/.env.prod <<'EOF'
+          VITE_API_BASE=/api
+          VITE_API_MOCK_ENABLED=false
+          VITE_DISABLE_ACCESS_MANAGEMENT=false
+          VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL || secrets.SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY=${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+          EOF
+
+          chmod 600 backend/.env.prod frontend/.env.prod
+
+      - name: Check host tooling
+        run: |
+          docker --version
+          docker compose version
+          nvidia-smi || true
+
+      - name: Build services
+        run: docker compose -f docker-compose.yml -f docker-compose.prod.yml build
+
+      - name: Deploy services
+        run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
+
+      - name: Show service status
+        run: docker compose -f docker-compose.yml -f docker-compose.prod.yml ps

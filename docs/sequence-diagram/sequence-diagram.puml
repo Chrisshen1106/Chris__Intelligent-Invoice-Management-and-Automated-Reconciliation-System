@@ -1,0 +1,212 @@
+@startuml Intelligent Invoice Management System
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 200
+skinparam sequenceGroupBorderColor #888888
+skinparam sequenceGroupFontStyle bold
+
+' ============================================================
+' Participants
+' ============================================================
+actor       "Employee\n(Role: E)"      as Emp
+actor       "Finance Reviewer\n(Role: A)" as Fin
+participant "Vue Router"               as Router
+participant "EmployeeDashboard"        as EmpUI
+participant "Finance View"             as FinUI
+participant "FastAPI Backend"          as API
+participant "OCREngine\n(PaddleOCR)"   as OCR
+participant "Extractor"                as Ext
+participant "StorageService"           as Storage
+participant "RPCService\n(db.py)"      as RPC
+database    "Supabase\n(PostgreSQL)"   as DB
+database    "Supabase\nStorage"        as Bucket
+
+' ============================================================
+' Flow 1: Login & Role-based Routing
+' ============================================================
+== Flow 1: Authentication & Role-based Access ==
+
+Emp -> Router : Navigate to /employee-dashboard
+activate Router
+
+Router -> DB : supabase.auth.getSession()
+activate DB
+DB --> Router : session (JWT)
+deactivate DB
+
+Router -> DB : profiles.select(role_code, is_active)\nWHERE id = session.user.id
+activate DB
+DB --> Router : { role_code: 'E', is_active: true }
+deactivate DB
+
+Router --> EmpUI : next() — render EmployeeDashboard
+deactivate Router
+
+' ============================================================
+' Flow 2: OCR Document Upload
+' ============================================================
+== Flow 2: Employee Uploads Document (OCR) ==
+
+Emp -> EmpUI : Select doc_type + upload file\n(PDF / JPG / PNG)
+activate EmpUI
+
+Emp -> EmpUI : Click "Run OCR"
+EmpUI -> API : POST /api/employee/invoices/ocr\n(multipart: invoiceFile)
+activate API
+
+API -> API : _check_file(file)\nvalidate content_type
+
+alt file is PDF
+    API -> OCR : _pdf_to_image_numpy(pdf_bytes)\n300 DPI via PyMuPDF
+    activate OCR
+    OCR --> API : ndarray
+    deactivate OCR
+else file is JPG / PNG
+    API -> OCR : _bytes_to_numpy(image_bytes)
+    activate OCR
+    OCR --> API : ndarray
+    deactivate OCR
+end
+
+API -> OCR : ocr_engine.ocr(img_array)
+activate OCR
+OCR --> API : raw bounding-box results
+deactivate OCR
+
+API -> API : merge rows by y-coordinate\n(ROW_TOLERANCE = 18px)\n→ merged_text + tokens
+
+API -> Ext : extract_invoice_data(merged_text, tokens)
+activate Ext
+Ext -> Ext : regex + spatial key-value parsing
+Ext --> API : { invoice_no, po_number, date,\nvendor_name, total_amount, items[] }
+deactivate Ext
+
+API --> EmpUI : 200 OK\n{ invoiceNo, poNo, invoiceDate,\nvendorName, totalAmount, items[] }
+deactivate API
+
+EmpUI --> Emp : Display OCR result\nfor confirmation/editing
+
+' ============================================================
+' Flow 3: Submit Invoice to Database
+' ============================================================
+== Flow 3: Employee Confirms & Submits Invoice ==
+
+Emp -> EmpUI : Confirm / edit fields → Click Submit
+EmpUI -> API : POST /api/employee/invoices\n(multipart: invoiceFile + invoiceData JSON)
+activate API
+
+API -> Storage : upload_to_storage(\n  entity_type='invoice',\n  entity_no=invoice_no,\n  filename, file_bytes\n)
+activate Storage
+Storage -> Bucket : storage.from('documents')\n.upload(path, file_bytes)
+activate Bucket
+Bucket --> Storage : storage_path
+deactivate Bucket
+Storage --> API : file_meta { bucket_id, storage_path,\noriginal_filename, file_type, file_size }
+deactivate Storage
+
+API -> RPC : create_invoice_with_ocr(\n  employee_id, invoice_no, invoice_date,\n  total_amount, vendor_name, po_no,\n  ocr_parsed_json, files=[file_meta]\n)
+activate RPC
+
+RPC -> DB : dev_create_invoice_with_ocr RPC\n(atomic transaction)
+activate DB
+DB -> DB : vendor upsert (from PO lookup)
+DB -> DB : INSERT core.invoices\n  workflow_status = 'pending_review'
+DB -> DB : INSERT core.ocr_runs\n  (ocr_parsed_json, ocr_raw_json)
+DB -> DB : INSERT core.invoice_files\n  (storage_path, file_type ...)
+DB --> RPC : { id, invoice_no, workflow_status }
+deactivate DB
+
+RPC --> API : invoice record
+deactivate RPC
+
+API --> EmpUI : 200 OK\n{ invoiceId, invoiceNo,\nstatus: 'pending_review', message }
+deactivate API
+
+EmpUI --> Emp : "Invoice submitted successfully"
+
+' ============================================================
+' Flow 4: Finance Review & Approve/Reject
+' ============================================================
+== Flow 4: Finance Reviewer Approves or Rejects Invoice ==
+
+Fin -> FinUI : Open /finance → Review tab
+activate FinUI
+
+FinUI -> DB : supabase.rpc('dev_get_invoices')\nvia GET /api/manager/invoice
+activate DB
+DB --> FinUI : invoices[] { invoiceNo, poNo,\nvendor, status, amount ... }
+deactivate DB
+
+FinUI --> Fin : Display invoice list\nwith match status (matched / low_confidence / mismatch)
+
+Fin -> FinUI : Select invoice → Click Approve / Reject
+activate FinUI
+
+alt Approve
+    FinUI -> DB : supabase RPC\nupdate workflow_status = 'approved'
+    activate DB
+    DB --> FinUI : OK
+    deactivate DB
+    FinUI --> Fin : Invoice approved
+else Reject
+    FinUI -> DB : supabase RPC\nupdate workflow_status = 'rejected'
+    activate DB
+    DB --> FinUI : OK
+    deactivate DB
+    FinUI --> Fin : Invoice rejected with reason
+end
+deactivate FinUI
+
+' ============================================================
+' Flow 5: Employee Resubmits Rejected Invoice
+' ============================================================
+== Flow 5: Employee Resubmits Rejected Invoice ==
+
+Emp -> EmpUI : Click "View Rejected Records"
+activate EmpUI
+
+EmpUI -> API : GET /api/employee/documents/rejected?docType=invoice
+activate API
+API -> RPC : list_rejected_documents(docType=invoice)
+activate RPC
+RPC -> DB : employee_get_rejected_documents / employee_get_rejected_invoices RPC
+activate DB
+DB --> RPC : rejected documents[]
+deactivate DB
+RPC --> API : list
+deactivate RPC
+API --> EmpUI : rejected invoices[]
+deactivate API
+
+EmpUI --> Emp : Show rejected list\nwith rejection reasons
+
+Emp -> EmpUI : Edit fields → Click Resubmit
+EmpUI -> API : PUT /api/employee/invoices/{invoiceNo}\n(invoiceFile? + invoiceData JSON)
+activate API
+
+API -> RPC : get_invoice_detail_by_no(invoiceNo)
+activate RPC
+RPC -> DB : dev_get_invoice_detail RPC
+activate DB
+DB --> RPC : { id, invoice_no, ... }
+deactivate DB
+RPC --> API : invoice_id
+deactivate RPC
+
+API -> RPC : resubmit_invoice(\n  invoice_id, acted_by,\n  field_changes[], comment\n)
+activate RPC
+RPC -> DB : dev_resubmit_invoice RPC\n  workflow_status → 'pending_review'
+activate DB
+DB --> RPC : { invoice_no, workflow_status }
+deactivate DB
+RPC --> API : result
+deactivate RPC
+
+API --> EmpUI : 200 OK\n{ invoiceNo, status: 'pending_review',\nmessage: '發票已重新送出審核' }
+deactivate API
+
+EmpUI --> Emp : "Invoice resubmitted for review"
+deactivate EmpUI
+
+@enduml

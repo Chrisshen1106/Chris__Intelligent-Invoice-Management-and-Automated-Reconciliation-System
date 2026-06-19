@@ -1,0 +1,53 @@
+services:
+  redis:
+    restart: always
+
+  ollama:
+    restart: always
+
+  ocr-service:
+    image: iimars-ocr-service:prod
+    restart: always
+
+  backend:
+    image: iimars-backend:prod
+    build:
+      target: production
+    env_file:
+      - ./backend/.env.prod
+    expose:
+      - "8000"
+    volumes:
+      - backend_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: always
+
+  celery-worker:
+    image: iimars-backend:prod
+    build:
+      target: production
+    env_file:
+      - ./backend/.env.prod
+    volumes:
+      - backend_logs:/app/logs
+    restart: always
+
+  web:
+    image: iimars-web:prod
+    build:
+      target: production
+      args:
+        VITE_API_BASE: /api
+    env_file:
+      - ./frontend/.env.prod
+    ports:
+      - "${WEB_HOST_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: always

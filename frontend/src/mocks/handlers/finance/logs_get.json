@@ -1,0 +1,9 @@
+[
+  {
+    "timestamp": "2026-04-08 10:00:00",
+    "invoiceNo": "INV-12345678",
+    "actionType": "approve",
+    "remark": "金額符合，核准",
+    "details": []
+  }
+]

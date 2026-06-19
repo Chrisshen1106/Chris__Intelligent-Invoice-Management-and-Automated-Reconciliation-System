@@ -1,0 +1,36 @@
+name: Mirror to NTU GitLab
+
+on:
+  push:
+    branches:
+      - "**"
+  delete:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Disable SSL verification
+        run: git config --global http.sslVerify false
+
+      - name: Add GitLab remote
+        run: |
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@sdm.im.ntu.edu.tw/r14725035/intelligent-invoice-management-and-automated-reconciliation-system.git
+
+      - name: Sync branches
+        if: github.event_name == 'push'
+        run: |
+          git push gitlab --all --force
+          git push gitlab --tags --force
+
+      - name: Delete branch on GitLab
+        if: github.event_name == 'delete'
+        run: |
+          echo "Deleting branch ${{ github.event.ref }}"
+          git push gitlab --delete ${{ github.event.ref }}

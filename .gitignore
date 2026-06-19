@@ -1,0 +1,97 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# virtual env
+.venv/
+backend/.venv-test/
+venv/
+env/
+backend/.venv-test/
+
+# FastAPI / logs
+*.log
+*.log.*
+ocr-service/logs/
+backend/logs/
+
+# =========================
+# Database
+# =========================
+*.db
+*.sqlite3
+
+# =========================
+# Environment variables
+# =========================
+# Never commit real environment files from any app folder.
+**/.env
+**/.env.*
+!**/.env.example
+
+# =========================
+# Alembic
+# =========================
+alembic/versions/*.pyc
+
+# =========================
+# Node / Vue
+# =========================
+node_modules/
+dist/
+.vite/
+*.local
+frontend/.npm-cache/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# pytest
+.pytest_cache/
+**/.pytest_cache/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Docker
+# =========================
+*.pid
+*.seed
+
+# =========================
+# Misc
+# =========================
+coverage/
+htmlcov/
+.cache/
+*.zip
+deploy-hotfix-three-way/
+notion/
+
+# =========================
+# Playwright
+# =========================
+frontend/test-results/
+frontend/playwright-report/

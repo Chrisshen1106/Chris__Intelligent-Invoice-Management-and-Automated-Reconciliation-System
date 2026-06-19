@@ -1,0 +1,15 @@
+[
+  {
+    "docType": "invoice",
+    "docNo": "INV-9999",
+    "invoiceNo": "INV-9999",
+    "poNo": "PO-9999",
+    "invoiceDate": "2026-04-01",
+    "vendorName": "測試供應商",
+    "taxId": "99998888",
+    "totalAmount": 5000,
+    "rejectReason": "金額不符，請重新確認",
+    "rejectedAt": "2026-04-05 10:00:00",
+    "docId": "DOC-004"
+  }
+]

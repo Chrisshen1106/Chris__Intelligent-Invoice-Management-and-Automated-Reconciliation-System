@@ -1,0 +1,47 @@
+@startuml Flow 4: Finance Reviewer Approves or Rejects Invoice
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 200
+
+actor       "Finance Reviewer\n(Role: A)" as Fin
+participant "Finance View"               as FinUI
+participant "FastAPI Backend"            as API
+database    "Supabase\n(PostgreSQL)"     as DB
+
+== Flow 4: Finance Reviewer Approves or Rejects Invoice ==
+
+Fin -> FinUI : Open /finance → Review tab
+activate FinUI
+
+FinUI -> API : GET /api/manager/invoice
+activate API
+API -> DB : supabase.rpc('dev_get_invoices', { p_limit: 50 })
+activate DB
+DB --> API : invoices[] { invoiceNo, poNo,\nvendor, workflow_status, amount ... }
+deactivate DB
+API --> FinUI : invoices[]
+deactivate API
+
+FinUI --> Fin : Display invoice list\nwith match status\n(matched / low_confidence / mismatch)
+
+Fin -> FinUI : Filter by status or select invoice
+Fin -> FinUI : Click Approve / Reject
+
+alt Batch Approve (matched only)
+    FinUI -> DB : supabase RPC\nupdate workflow_status = 'approved'\nfor selected invoice IDs
+    activate DB
+    DB --> FinUI : OK
+    deactivate DB
+    FinUI --> Fin : Selected invoices approved
+else Single Reject
+    FinUI -> DB : supabase RPC\nupdate workflow_status = 'rejected'\n+ rejection reason
+    activate DB
+    DB --> FinUI : OK
+    deactivate DB
+    FinUI --> Fin : Invoice rejected with reason
+end
+
+deactivate FinUI
+
+@enduml

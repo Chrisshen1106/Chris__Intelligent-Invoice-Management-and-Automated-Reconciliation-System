@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "accountStatus": 1,
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb29rYXRvcl9pZCjIjoxMjM0NTY3ODksImlhdCI6MTcwMTAwMDAwMCwiZXhwIjoxNzAxMDA2MDAwfQ.mock_signature",
+  "refreshToken": "mock_refresh_token_def456",
+  "user": {
+    "id": "123456789",
+    "email": "testuser@example.com",
+    "displayName": "Test User",
+    "googleId": "google_id_mock_value",
+    "picture": "https://lh3.googleusercontent.com/a/default-user=s96-c",
+    "role": "employee",
+    "department": "IT",
+    "verified": true
+  },
+  "expiresIn": 3600,
+  "tokenType": "Bearer",
+  "errorMessage": null
+}

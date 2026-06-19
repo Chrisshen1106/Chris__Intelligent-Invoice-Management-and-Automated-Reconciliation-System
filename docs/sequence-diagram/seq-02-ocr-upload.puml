@@ -1,0 +1,55 @@
+@startuml Flow 2: Employee Uploads Document (OCR)
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 200
+
+actor       "Employee\n(Role: E)"  as Emp
+participant "EmployeeDashboard"    as EmpUI
+participant "FastAPI Backend"      as API
+participant "OCREngine\n(PaddleOCR)" as OCR
+participant "Extractor"            as Ext
+
+== Flow 2: Employee Uploads Document (OCR) ==
+
+Emp -> EmpUI : Select doc_type + upload file\n(PDF / JPG / PNG)
+activate EmpUI
+
+Emp -> EmpUI : Click "Run OCR"
+EmpUI -> API : POST /api/employee/invoices/ocr\n(multipart: invoiceFile)
+activate API
+
+API -> API : _check_file(file)\nvalidate content_type
+
+alt file is PDF
+    API -> OCR : _pdf_to_image_numpy(pdf_bytes)\n300 DPI via PyMuPDF
+    activate OCR
+    OCR --> API : ndarray
+    deactivate OCR
+else file is JPG / PNG
+    API -> OCR : _bytes_to_numpy(image_bytes)
+    activate OCR
+    OCR --> API : ndarray
+    deactivate OCR
+end
+
+API -> OCR : ocr_engine.ocr(img_array)
+activate OCR
+OCR --> API : raw bounding-box results
+deactivate OCR
+
+API -> API : merge rows by y-coordinate\n(ROW_TOLERANCE = 18px)\n→ merged_text + tokens
+
+API -> Ext : extract_invoice_data(merged_text, tokens)
+activate Ext
+Ext -> Ext : regex + spatial key-value parsing
+Ext --> API : { invoice_no, po_number, date,\nvendor_name, total_amount, items[] }
+deactivate Ext
+
+API --> EmpUI : 200 OK\n{ invoiceNo, poNo, invoiceDate,\nvendorName, totalAmount, items[] }
+deactivate API
+
+EmpUI --> Emp : Display OCR result\nfor confirmation / editing
+deactivate EmpUI
+
+@enduml

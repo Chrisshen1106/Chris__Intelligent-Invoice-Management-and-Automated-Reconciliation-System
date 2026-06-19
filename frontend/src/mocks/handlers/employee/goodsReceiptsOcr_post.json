@@ -1,0 +1,25 @@
+{
+  "grNo": "GR-20260410-001",
+  "poNo": "PO-20260405-001",
+  "applicant": "王小明",
+  "receiver": "張志偉",
+  "grDate": "2026-04-10",
+  "totalQty": 55,
+  "totalAmount": 15000,
+  "items": [
+    {
+      "lineNo": 1,
+      "itemName": "A4 影印紙",
+      "receivedQty": 50,
+      "acceptedQty": 50,
+      "lineAmount": 5000
+    },
+    {
+      "lineNo": 2,
+      "itemName": "碳粉匣",
+      "receivedQty": 5,
+      "acceptedQty": 5,
+      "lineAmount": 10000
+    }
+  ]
+}
